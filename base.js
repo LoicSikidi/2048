@@ -1,50 +1,28 @@
-const pipe       = (...fns) => x => [...fns].reduce((acc, f) => f(acc), x)
-const prop       = k => o => o[k]
-const dropFirst  = xs => xs.slice(1)
-const initMatrix = length => [...Array(length)].map(k => Array(length).fill(0))
-const rnd        = min => max => Math.floor(Math.random() * max) + min
-const objOf      = k => v => ({ [k]: v })
-const copyXs     = xs => xs.map(v => v)
-const reverse    = xs => xs.slice(0).reverse()
-const col        = matrix => k => matrix.map(row => row[k])
-const row        = matrix => k => matrix.slice(k, k+1)
-const up         = xs => {
-    var newXs = copyXs(xs);
-    for (let index = 0; index < newXs.length; index++) {
-        if (index+1 >= newXs.length) {
-            continue;
-        }
-        if(newXs[index+1] === 0){
-            newXs[index+1] = newXs[index];
-            newXs[index] = 0;
-        }
-        else if (newXs[index] === newXs[index+1]){
-            newXs[index] = 0;
-            newXs[index+1] = newXs[index+1] * newXs[index+1];
-        }
-    }
-    return newXs;
-}
-const moveVertical = matrix => Object.keys(matrix)
-  .map(k => pipe(reverse, up, reverse)(col(matrix)(k)))
-  .reduce((acc, xs) => {
-    acc.concat(xs.reduce((acc2,xs2,i) => {
-      if(!acc2[i]){
-          acc2[i] = []
-      }        
-      acc2[i].push(xs2)
-    },[]))
-    // for (let i = 0; i < xs.length; i++) {
-    //   if(!acc[i]){
-    //       acc[i] = []
-    //   }
-    //   acc[i].push(xs[i])
-    // }
-    return acc;
-  }, [])
-const addRnd2    = matrix => rndX => rndY => matrix.map((row,x) => row.map((cell, y) => (x === rndX && y === rndY) ? 2 : cell))
-const spec       = o => x => Object.keys(o)
-  .map(k => objOf(k)(o[k](x)))
-  .reduce((acc, o) => Object.assign(acc, o))
+const pipe        = (...fns) => x => [...fns].reduce((acc, f) => f(acc), x)
+const prop        = k => o => o[k]
+const merge       = o1 => o2 => Object.assign({}, o1, o2)
+const rnd         = min => max => Math.floor(Math.random() * max) + min
+const objOf       = k => v => ({ [k]: v })
+const spec        = o => x => Object.keys(o)
+ .map(k => objOf(k)(o[k](x)))
+ .reduce((acc, o) => Object.assign(acc, o))
+const initMatrix  = length => [...Array(length)].map(k => Array(length).fill(0))
+const m2emptyPos  = matrix => matrix.map((row, x) => row.map((cell, y) => cell ? 0 : {x:x,y:y}))
+const addRnd2     = matrix => pos => matrix.map((row, x) => row.map((cell, y) => (x === pos.x && y === pos.y) ? 2 : cell))
+const flat        = matrix => matrix.reduce((acc, xs) => acc.concat(xs))
+const col         = matrix => k => matrix.map(row => row[k])
+const row         = matrix => k => matrix.slice(k, k+1)[0]
+const getLast     = xs => xs.slice(xs.length-1, xs.length)[0]
+const reverse     = xs => xs.slice(0).reverse()
+const putXs       = (k, v) => xs => xs.map((e,index) => (k===index) ? v : e)
+const fill        = max => xs => xs.concat(Array(max - xs.length).fill(0))
+const cleanXs     = xs => xs.filter(el => el)
+const move        = xs => pipe(cleanXs, mergeSquare, fill(xs.length))(xs)
 
-module.exports = {pipe, prop, dropFirst, initMatrix, rnd, up, moveVertical, addRnd2, objOf, spec};
+//private functions
+const mergeSquare = xs => xs
+ .reduce((acc, e) => !isMergable(getLast(acc),e) ? acc.concat({value:e, isFrozen:false}) : putXs(acc.length-1,{value:e*2, isFrozen:true})(acc), [])
+ .map(o => o.value)
+const isMergable  = (o, value) => !o ? false : !o.isFrozen && o.value === value
+
+module.exports = {pipe, prop, merge, getLast, initMatrix, rnd, move, flat, reverse, col, row, addRnd2, objOf, spec, m2emptyPos, cleanXs, fill}

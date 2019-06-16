@@ -1,0 +1,90 @@
+
+html, body {
+    height:          100%;
+    margin:          0;
+    padding:         0;
+    background:      #121212;
+    display:         flex;
+    justify-content:  center;
+    align-items:     center;
+    font-family:     "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+#canvas {
+    border-radius:    6px;
+    box-sizing:       border-box;
+    padding:          12px;
+    width:            450px;
+    height:           450px;
+    background-color: rgba(238, 228, 218, 0.35);
+}
+
+.box {
+  display:               grid;
+  grid-gap:              12px;
+  margin-bottom:         12px;
+  grid-auto-rows:        minmax(98px, auto);
+  grid-template-columns: repeat(4, 1fr);
+  text-align:            center;
+  font-size:             50px;
+  font-weight:           bold;
+  font-size:             43px !important;
+  line-height:           98px;
+  color:               #776e65;
+}
+
+.empty {
+    background-color: #bbada0;
+}
+
+.square-2 {
+    background-color: #eee4da;
+}
+.square-4 {
+    background-color: #ede0c8;
+}
+
+.square-8 {
+    color:      #f9f6f2;
+    background: #f2b179;
+}
+
+.square-16 {
+    color:      #f9f6f2;
+    background: #f59563;
+}
+
+.square-32 {
+    color:      #f9f6f2;
+    background: #f67c5f;
+}
+
+.square-64 {
+    color:      #f9f6f2;
+    background: #f65e3b;
+}
+
+.square-128 {
+    color:      #f9f6f2;
+    background: #edcf72;
+}
+
+.square-256 {
+    color:      #f9f6f2;
+    background: #edcc61;
+}
+
+.square-512 {
+    color:      #f9f6f2;
+    background: #edc850;
+}
+
+.square-1024 {
+    color:      #f9f6f2;
+    background: #edc53f;
+}
+
+.square-2048 {
+    color:      #f9f6f2;
+    background: #edc22e;
+}
