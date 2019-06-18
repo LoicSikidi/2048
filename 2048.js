@@ -22,7 +22,7 @@ const initialState = () => ({
 // Randomness
 const pickRandomElem = xs => xs[rnd(0)(xs.length)]
 const populate   = matrix => {
-    const emptyRows = pipe(m2emptyPos, flat, cleanXs)(matrix)
+    const emptyRows = pipe(m2emptyPos, flat, removeEmpty)(matrix)
     return emptyRows.length ? pipe(pickRandomElem, addRnd2(matrix))(emptyRows) : matrix
 }
 
