@@ -36,13 +36,17 @@ const addRnd2        = matrix => pos => matrix.map((row, x) => row.map((cell, y)
 // Conditions
 const isVerticalMove = move => move === NORTH || move === SOUTH 
 const isValidMove    = state => move => JSON.stringify(state.matrix) !== JSON.stringify(nextMove(state.matrix)(move))
-const isLose         = state => flat(state.matrix).every(e => e > 0)
+const isLose         = state => !isValidMove(state)(NORTH) && !isValidMove(state)(SOUTH) 
+  && !isValidMove(state)(WEST) && !isValidMove(state)(EAST)
 
 // Next values based on state
 const nextMoves      = state => state.moves
 const nextMatrix     = state => pipe(nextMove(state.matrix), populate)(getLastMove(state))
 const nextIsWin      = state => pipe(nextMove(state.matrix), flat)(getLastMove(state)).some(e => e >= GOAL)
-const nextIsLose     = state => pipe(nextMove(state.matrix), flat)(getLastMove(state)).every(e => e > 0)
+const nextIsLose     = state => pipe(nextMove(state.matrix), populate, stateFromMtx, isLose)(getLastMove(state))
+
+// Utils
+const stateFromMtx   = matrix => ({ matrix: matrix })
 
 // Move mecanism
 const getLastMove    = state => getLast(state.moves) 

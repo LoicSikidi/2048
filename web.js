@@ -23,6 +23,14 @@ const draw = () => {
         })
         canvas.appendChild(newNode)
     })
+    // Handle loose behavior
+    if(state.isLose) {
+      setTimeout(() => {
+        alert('You loose :(')
+        state = initialState()
+        draw()
+      }, 200)
+    }
 }
 
 // Key events
